@@ -1,0 +1,107 @@
+extends index.pug
+block css
+  link(rel='stylesheet', href='/sorter/css/theme.default.min.css', type='text/css')
+  link(rel='stylesheet', href='/sorter/css/jquery.tablesorter.pager.min.css', type='text/css')
+block scripts
+  script(src='/sorter/js/jquery.tablesorter.min.js')
+  script(src='/sorter/js/jquery.tablesorter.pager.min.js')
+  script(src='/sorter/js/jquery.tablesorter.widgets.min.js')
+  script(src='/sorter/js/parsers/parser-metric.min.js')
+block container
+  - function formatBytes(a,b=2){if(0===a)return"0 Bytes";const c=0>b?0:b,d=Math.floor(Math.log(a)/Math.log(1024));return parseFloat((a/Math.pow(1024,d)).toFixed(c))+" "+["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"][d]}
+  div#container
+    table#results.tablesorter
+      thead
+        tr
+          th seeders
+          th leechers
+          th name
+          th hash / magnet
+          th files
+          th.sorter-metric(data-metric-name-full="byte|Byte|BYTE" data-metric-name-abbr="b|B") size
+          th added
+          th status
+          th username
+          th category
+          th imdb
+      tbody
+        each val, key in results
+          tr(id=val.id)
+            td= val.seeders
+            td= val.leechers
+            td
+              a(title="Open via ThePirateBay" href="https://thepiratebay.org/description.php?id=" + val.id,target="_blank") #{val.name}
+            td
+              a(href=getMagnet(val.info_hash), target="_blank") #{val.info_hash}
+            td= val.num_files
+            td= formatBytes(val.size,2)
+            td #{ moment(1000 * val.added).format('YYYY/MM/DD HH:MM') }
+            td= val.status
+            td= val.username
+            td!= getCategory(val.category)
+            if(val.imdb.length)
+              td
+                a(href="https://www.imdb.com/title/" + val.imdb, target="_blank") IMDB
+            else
+              td
+      tfoot
+        tr
+          th seeders
+          th leechers
+          th name
+          th hash / magnet
+          th files
+          th size
+          th added
+          th status
+          th username
+          th category
+          th imdb
+        tr
+          th.ts-pager(colspan='11')
+            .form-inline
+              .btn-group.btn-group-sm.mx-1(role='group')
+                button.btn.btn-secondary.first(type='button' title='first') &larrb;
+                button.btn.btn-secondary.prev(type='button' title='previous') &larr;
+              span.pagedisplay
+              .btn-group.btn-group-sm.mx-1(role='group')
+                button.btn.btn-secondary.next(type='button' title='next') &rarr;
+                button.btn.btn-secondary.last(type='button' title='last') &rarrb;
+              select.form-control-sm.custom-select.px-1.pagesize(title='Select page size')
+                option(selected='selected' value='10') 10
+                option(value='20') 20
+                option(value='30') 30
+                option(value='all') All Rows
+              select.form-control-sm.custom-select.px-4.mx-1.pagenum(title='Select page number')
+
+  script(type="text/javascript").
+    $(function() {$("#results").tablesorter();});
+    $(function() {
+      $("select#category").val(#{category});
+      $("table").tablesorter({
+        theme : "bootstrap",
+        widthFixed: true,
+        widgets : [ "filter", "columns", "zebra" ],
+        widgetOptions : {
+          zebra : ["even", "odd"],
+          columns: [ "primary", "secondary", "tertiary" ],
+          filter_reset : ".reset",
+          filter_cssFilter: [
+            'form-control',
+            'form-control',
+            'form-control custom-select',
+            'form-control',
+            'form-control',
+            'form-control',
+            'form-control'
+          ]
+        }
+      })
+      .tablesorterPager({
+        container: $(".ts-pager"),
+        cssGoto  : ".pagenum",
+        removeRows: false,
+        output: '{startRow} - {endRow} / {filteredRows} ({totalRows})'
+      });
+
+    });

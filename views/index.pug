@@ -1,0 +1,73 @@
+html
+  head
+    title= title
+    script(src="https://code.jquery.com/jquery-3.5.1.min.js")
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js")
+    link(rel="stylesheet", href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css", type="text/css")
+    link(rel="stylesheet", href="/css.css", type="text/css")
+    block css
+    block scripts
+  body
+    div#content
+      div#search
+        form(action="/search",method="GET",class="row align-items-center")
+          div.row
+            div.col
+              input(type="text",name="s",value=search,placeholder="Search...",class="form-control")
+            div.col-auto
+              select(name="c", class="form-select", aria-label=".form-select-lg example" id="category")
+                option(value="0") All
+                optgroup(label="Audio")
+                  option(value="101") Music
+                  option(value="102") Audio books
+                  option(value="103") Sound clips
+                  option(value="104") FLAC
+                  option(value="199") Other
+                optgroup(label="Video")
+                  option(value="201") Movies
+                  option(value="202") Movies DVDR
+                  option(value="203") Music videos
+                  option(value="204") Movie clips
+                  option(value="205") TV shows
+                  option(value="206") Handheld
+                  option(value="207") HD - Movies
+                  option(value="208") HD - TV shows
+                  option(value="209") 3D
+                  option(value="299") Other
+                optgroup(label="Applications")
+                  option(value="301") Windows
+                  option(value="302") Mac
+                  option(value="303") UNIX
+                  option(value="304") Handheld
+                  option(value="305") IOS (iPad/iPhone)
+                  option(value="306") Android
+                  option(value="399") Other OS
+                optgroup(label="Games")
+                  option(value="401") PC
+                  option(value="402") Mac
+                  option(value="403") PSx
+                  option(value="404") XBOX360
+                  option(value="405") Wii
+                  option(value="406") Handheld
+                  option(value="407") IOS (iPad/iPhone)
+                  option(value="408") Android
+                  option(value="499") Other
+                optgroup(label="Porn")
+                  option(value="501") Movies
+                  option(value="502") Movies DVDR
+                  option(value="503") Pictures
+                  option(value="504") Games
+                  option(value="505") HD - Movies
+                  option(value="506") Movie clips
+                  option(value="599") Other
+                optgroup(label="Other")
+                  option(value="601") E-books
+                  option(value="602") Comics
+                  option(value="603") Pictures
+                  option(value="604") Covers
+                  option(value="605") Physibles
+                  option(value="699") Other
+            div.col-auto
+              input(type="submit", value="Search", class="btn btn-primary")
+      block container
+        div#container
